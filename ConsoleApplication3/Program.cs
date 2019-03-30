@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ConsoleApplication3
@@ -10,17 +11,39 @@ namespace ConsoleApplication3
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Iveskite studentu duomenys, kai noresi baigti iveskite +");
             List<Student> students = new List<Student>();
+
+            /*Console.WriteLine("Iveskite studentu duomenys, kai noresi baigti iveskite +");
             while(true) {
                 Console.WriteLine("Iveskite studento duomenys");
 
-                students.Add(SetStudent());
+                students.Add(SetStudentFromConsole());
                 Console.WriteLine("Ar norite baigti? 't' = Taip");
 
                 if (Console.ReadLine().ToLower() == "t") {
                     break;
                 }
+            }*/
+
+            string[] lines = System.IO.File.ReadAllLines("students.txt");
+            Boolean first = true;
+            foreach (string line in lines)
+            {
+                if(first) {
+                    first = false;
+                    continue;
+                }
+                string[] data = line.Split(' ');
+                double[] nd = new double[5];
+                nd[0] = Double.Parse(data[2]);
+                nd[1] = Double.Parse(data[3]);
+                nd[2] = Double.Parse(data[4]);
+                nd[3] = Double.Parse(data[5]);
+                nd[4] = Double.Parse(data[6]);
+                double egz = Double.Parse(data[7]);
+
+                students.Add(new Student(5,nd, egz,data[0], data[1]));
+                
             }
 
             string[] header = new string[4];
@@ -51,7 +74,8 @@ namespace ConsoleApplication3
         }
 
 
-        static Student SetStudent() {
+        static Student SetStudentFromConsole()
+        {
             Console.WriteLine("Iveskite ND skaiciu");
             int n = Convert.ToInt32(Console.ReadLine());
             double[] nd = new double[n];
@@ -61,18 +85,21 @@ namespace ConsoleApplication3
             Console.WriteLine("Iveskite ND rezultatus");
 
             Console.WriteLine("Ar sudeliot ND asitiktinai? T/N");
-            if(Console.ReadLine().ToLower() == "n") {
+            if (Console.ReadLine().ToLower() == "n")
+            {
                 for (int i = 0; i < n; i++)
                 {
                     nd[i] = Convert.ToInt32(Console.ReadLine());
                 }
-            }else {
+            }
+            else
+            {
                 for (int i = 0; i < n; i++)
                 {
                     nd[i] = new Random().Next(10);
                 }
             }
-            
+
             Console.WriteLine("Iveskite varda");
 
             string fname = (Console.ReadLine());
@@ -82,6 +109,7 @@ namespace ConsoleApplication3
 
             return new Student(n, nd, egz, fname, lname);
         }
+
         static double GetFinalAvg(double[] rez, double egz) {
             double final = 0;
             for (int i = 0; i < rez.Length; i++) {
