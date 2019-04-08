@@ -1,111 +1,92 @@
-﻿using System;
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.IO;
 
 namespace ConsoleApplication3
 {
-    class Program
+    public class Program
     {
+
+        //Kadangi Random clase kazkodem grazina statinius duomenys, tai radau toki sprendima internte
+        private static readonly Random random = new Random();
+        private static readonly object syncLock = new object();
+
         static void Main(string[] args)
         {
-            List<Student> students = new List<Student>();
-
-            /*Console.WriteLine("Iveskite studentu duomenys, kai noresi baigti iveskite +");
-            while(true) {
-                Console.WriteLine("Iveskite studento duomenys");
-
-                students.Add(SetStudentFromConsole());
-                Console.WriteLine("Ar norite baigti? 't' = Taip");
-
-                if (Console.ReadLine().ToLower() == "t") {
-                    break;
-                }
-            }*/
-
-            string[] lines = System.IO.File.ReadAllLines("students.txt");
-            Boolean first = true;
-            foreach (string line in lines)
+            Stopwatch sw;
+            for (int c = 10; c <= 100000; c *= 10)
             {
-                if(first) {
-                    first = false;
-                    continue;
+                sw = Stopwatch.StartNew();
+                List<Student> students = new List<Student>();
+
+                string outputV = "";
+                string outputK = "";
+                for (int j = 0; j < c; j++)
+                {
+                    students.Add(new Program().GenerateStudent(j));
+
                 }
-                string[] data = line.Split(' ');
-                double[] nd = new double[5];
-                double egz = 0;
-                try {
-                    nd[0] = Double.Parse(data[2]);
-                    nd[1] = Double.Parse(data[3]);
-                    nd[2] = Double.Parse(data[4]);
-                    nd[3] = Double.Parse(data[5]);
-                    nd[4] = Double.Parse(data[6]);
-                    egz = Double.Parse(data[7]);
-                } catch(Exception e) {
-                    Console.WriteLine("Bandoma simbolį konvertuotį į skaičių.");                    System.Environment.Exit(1);
-                }
+                students.Sort((x, y) => x.Final.CompareTo(y.Final));
+
+                string[] header = new string[4];
+                header[0] = "Vardas";
+                header[1] = "Pavarde";
+                header[2] = "Galutinis / Vid";
+                header[3] = "Kategorija";
+
+                outputK += PrintRow(header);
+                outputK += PrintLine();
+                outputV += PrintRow(header);
+                outputV += PrintLine();
+
+                for (int i = 0; i < students.Count; i++)
+                {
+                    string[] row = new string[3];
+
+                    row[0] = students[i].Fname;
+                    row[1] = students[i].Lname;
+                    row[2] = students[i].Final.ToString();
+                    if (students[i].Final >= 5.0)
+                    {
+                        outputK += PrintRow(row);
+                    }
+                    else
+                    {
+                        outputV += PrintRow(row);
+                    }
 
 
-                students.Add(new Student(5,nd, egz,data[0], data[1]));
-                
+
+                }
+                Console.WriteLine("Įvyko precesas per: " + sw.ElapsedMilliseconds + " ms , su " + c +" duomenimis");
+                sw.Stop();
+                string path = "Z:/CS_output";
+                File.WriteAllText(Path.Combine(path, "Kresult" + c + ".txt"), outputK);
+                File.WriteAllText(Path.Combine(path, "Vresult" + c + ".txt"), outputV);
             }
 
-            string[] header = new string[4];
-            header[0] = "Vardas";
-            header[1] = "Pavarde";
-            header[2] = "Galutinis / Vid";
-            header[3] = "Galutinis / Med";
-
-            PrintRow(header);
-            PrintLine();
-
-            for (int i = 0; i < students.Count; i++)
-            {
-                string[] row = new string[4];
-
-                row[0] = students[i].Fname;
-                row[1] = students[i].Lname;
-                try {
-                    row[2] = GetFinalAvg(students[i].Nd, students[i].Egz).ToString();
-                    row[3] = GetFinalMedian(students[i].Nd, students[i].Egz).ToString();
-                } catch (Exception e) {
-                    Console.WriteLine("Paduoti blogi duomenys į galutį rezultato metodą.");
-                    System.Environment.Exit(1);
-                }
-
-                PrintRow(row);
-
-            }
-
-            
 
 
         }
+        public static int RandomNumber(int min, int max)
+        {
+            lock (syncLock)
+            { // synchronize
+                return random.Next(min, max);
+            }
+        }
 
 
-
-        static Student SetStudentFromConsole()
+        Student SetStudent()
         {
             Console.WriteLine("Iveskite ND skaiciu");
-            int n = 0;
-            try {
-                n = Convert.ToInt32(Console.ReadLine());
-            } catch(Exception e) {
-                Console.WriteLine("Bandoma konvertuotį simbo į skaičių.");
-                System.Environment.Exit(1);
-            }
+            int n = Convert.ToInt32(Console.ReadLine());
             double[] nd = new double[n];
             Console.WriteLine("Iveskite egz rezultata");
 
-            double egz = 0;
-            try{
-                egz = Convert.ToInt32(Console.ReadLine());
-            }catch (Exception e) {
-                Console.WriteLine("Bandoma konvertuotį simbo į skaičių.");
-                System.Environment.Exit(1);
-            }
+            double egz = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Iveskite ND rezultatus");
 
             Console.WriteLine("Ar sudeliot ND asitiktinai? T/N");
@@ -120,7 +101,7 @@ namespace ConsoleApplication3
             {
                 for (int i = 0; i < n; i++)
                 {
-                    nd[i] = new Random().Next(10);
+                    nd[i] = RandomNumber(1, 10); ;
                 }
             }
 
@@ -131,12 +112,42 @@ namespace ConsoleApplication3
 
             string lname = (Console.ReadLine());
 
-            return new Student(n, nd, egz, fname, lname);
+            return new Student(n, nd, egz, fname, lname, GetFinalAvg(nd, egz));
         }
+        public Student GenerateStudent(int number)
+        {
+            int n = 5;
+            double[] nd = new double[n];
+            double egz = RandomNumber(1, 10);
 
-        static double GetFinalAvg(double[] rez, double egz) {
+            for (int i = 0; i < n; i++)
+            {
+
+                nd[i] = RandomNumber(1, 10);
+            }
+
+
+            string fname = "Vardas" + number;
+
+            string lname = "Pavarde" + number;
+
             double final = 0;
-            for (int i = 0; i < rez.Length; i++) {
+            for (int i = 0; i < n; i++)
+            {
+                final += nd[i];
+            }
+            final /= n;
+            final *= 0.3;
+            final += 0.7 * egz;
+
+
+            return new Student(n, nd, egz, fname, lname, final);
+        }
+        public double GetFinalAvg(double[] rez, double egz)
+        {
+            double final = 0;
+            for (int i = 0; i < rez.Length; i++)
+            {
                 final += rez[i];
             }
             final /= (double)rez.Length;
@@ -158,7 +169,7 @@ namespace ConsoleApplication3
             return median;
         }
 
-        static void PrintRow(params string[] columns)
+        static string PrintRow(params string[] columns)
         {
             int width = (tableWidth - columns.Length) / columns.Length;
             string row = "|";
@@ -168,7 +179,7 @@ namespace ConsoleApplication3
                 row += AlignCentre(column, width) + "|";
             }
 
-            Console.WriteLine(row);
+            return (row + "\n");
         }
 
         static string AlignCentre(string text, int width)
@@ -184,13 +195,109 @@ namespace ConsoleApplication3
                 return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
             }
         }
-        static void PrintLine()
+        static string PrintLine()
         {
-            Console.WriteLine(new string('-', tableWidth));
+            return (new string('-', tableWidth) + "\n");
         }
         static int tableWidth = 77;
 
     }
 
-    
+    public class Student
+    {
+        private int nNd;
+        private double[] nd;
+        private double egz;
+        private string fname;
+        private string lname;
+        private double final;
+
+        public Student(int nNd, double[] nd, double egz, string fname, string lname, double final)
+        {
+            this.nNd = nNd;
+            this.nd = nd;
+            this.egz = egz;
+            this.fname = fname;
+            this.lname = lname;
+            this.final = final;
+        }
+
+        public int NNd
+        {
+            get
+            {
+                return nNd;
+            }
+
+            set
+            {
+                nNd = value;
+            }
+        }
+        public double Final
+        {
+            get
+            {
+                return final;
+            }
+
+            set
+            {
+                final = value;
+            }
+        }
+
+        public double[] Nd
+        {
+            get
+            {
+                return nd;
+            }
+
+            set
+            {
+                nd = value;
+            }
+        }
+
+        public double Egz
+        {
+            get
+            {
+                return egz;
+            }
+
+            set
+            {
+                egz = value;
+            }
+        }
+
+        public string Fname
+        {
+            get
+            {
+                return fname;
+            }
+
+            set
+            {
+                fname = value;
+            }
+        }
+
+        public string Lname
+        {
+            get
+            {
+                return lname;
+            }
+
+            set
+            {
+                lname = value;
+            }
+        }
+    }
 }
+
