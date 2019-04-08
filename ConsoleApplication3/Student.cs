@@ -13,14 +13,16 @@ namespace ConsoleApplication3
         private double egz;
         private string fname;
         private string lname;
+        private double final;
 
-        public Student(int nNd, double[] nd, double egz, string fname, string lname)
+        public Student(int nNd, double[] nd, double egz, string fname, string lname, double final)
         {
             this.nNd = nNd;
             this.nd = nd;
             this.egz = egz;
             this.fname = fname;
             this.lname = lname;
+            this.final = final;
         }
 
         public int NNd
@@ -33,6 +35,18 @@ namespace ConsoleApplication3
             set
             {
                 nNd = value;
+            }
+        }
+        public double Final
+        {
+            get
+            {
+                return final;
+            }
+
+            set
+            {
+                final = value;
             }
         }
 
