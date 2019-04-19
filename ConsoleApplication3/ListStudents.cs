@@ -15,7 +15,7 @@ namespace ConsoleApplication3
         public ListStudents()
         {
             Stopwatch sw;
-            for (int c = 10; c <= 10000; c *= 10)
+            for (int c = 10; c <= 100000; c *= 10)
             {
 
                 List<Student> students = new List<Student>();
