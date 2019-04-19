@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -15,16 +15,16 @@ namespace ConsoleApplication3
         public ListStudents()
         {
             Stopwatch sw;
-            for (int c = 10; c <= 100000; c *= 10)
+            for (int c = 10; c <= 10000; c *= 10)
             {
 
-                LinkedList<Student> students = new LinkedList<Student>();
+                List<Student> students = new List<Student>();
 
                 string outputV = "";
                 string outputK = "";
                 for (int j = 0; j < c; j++)
                 {
-                    students.AddLast(GenerateStudent(j));
+                    students.Add(GenerateStudent(j));
 
                 }
 
