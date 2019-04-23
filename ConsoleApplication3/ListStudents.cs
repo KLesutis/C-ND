@@ -62,10 +62,9 @@ namespace ConsoleApplication3
                 }
                 Console.WriteLine("Įvyko precesas per: " + sw.ElapsedMilliseconds + " ms , su " + c + " duomenimis");
                 sw.Stop();
-
-                string path = "Z:/CS_output/list";
-                File.WriteAllText(System.IO.Path.Combine(path, "Kresult" + c + ".txt"), outputK);
-                File.WriteAllText(Path.Combine(path, "Vresult" + c + ".txt"), outputV);
+                
+                File.WriteAllText("list_" + "Kresult" + c + ".txt", outputK);
+                File.WriteAllText("list_" + "Vresult" + c + ".txt", outputV);
             }
 
         }

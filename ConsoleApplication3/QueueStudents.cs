@@ -7,23 +7,23 @@ using System.Linq;
 namespace ConsoleApplication3
 {
     
-    class LinkendListStudents
+    class QueueStudents
     {
         private static Random random = new Random();
         private static object syncLock = new object();
 
-       public LinkendListStudents() {
+       public QueueStudents() {
             Stopwatch sw;
             for (int c = 10; c <= 100000; c *= 10)
             {
 
-                LinkedList<Student> students = new LinkedList<Student>();
+                Queue<Student> students = new Queue<Student>();
 
                 string outputV = "";
                 string outputK = "";
                 for (int j = 0; j < c; j++)
                 {
-                    students.AddLast(GenerateStudent(j));
+                    students.Enqueue(GenerateStudent(j));
 
                 }
 
@@ -61,9 +61,9 @@ namespace ConsoleApplication3
                 }
                 Console.WriteLine("Įvyko precesas per: " + sw.ElapsedMilliseconds + " ms , su " + c + " duomenimis");
                 sw.Stop();
-
-                File.WriteAllText("linked_"+"Kresult" + c + ".txt", outputK);
-                File.WriteAllText("linked_" + "Vresult" + c + ".txt", outputV);
+                
+                File.WriteAllText("queue_" + "Kresult" + c + ".txt", outputK);
+                File.WriteAllText("queue_" + "Vresult" + c + ".txt", outputV);
             }
 
         }

@@ -18,6 +18,8 @@ namespace ConsoleApplication3
             LinkendListStudents linkeden = new LinkendListStudents();
             Console.WriteLine("Statistika List");
             ListStudents list = new ListStudents();
+            Console.WriteLine("Queue List");
+            QueueStudents queue = new QueueStudents();
 
 
         }

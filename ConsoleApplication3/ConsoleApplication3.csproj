@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueueStudents.cs" />
     <Compile Include="LinkendListStudents.cs" />
     <Compile Include="ListStudents.cs" />
     <Compile Include="Program.cs" />
