@@ -1,4 +1,5 @@
-﻿using System;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,15 +12,19 @@ namespace ConsoleApplication3
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Statistika List");
-            ListStudents list = new ListStudents();
+
+
             Console.WriteLine("Statistika LinkendList");
             LinkendListStudents linkeden = new LinkendListStudents();
-            
+            Console.WriteLine("Statistika List");
+            ListStudents list = new ListStudents();
+            Console.WriteLine("Queue List");
+            QueueStudents queue = new QueueStudents();
 
 
         }
     }
-
+        
 
 }
+
