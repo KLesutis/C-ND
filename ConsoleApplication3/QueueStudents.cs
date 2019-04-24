@@ -59,7 +59,6 @@ namespace ConsoleApplication3
                         outputV += PrintRow(row);
                         vStudent.Enqueue(student);
                     }
-                    students.Remove(student);
                 }
 
                 Process proc = Process.GetCurrentProcess();
