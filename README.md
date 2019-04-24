@@ -26,6 +26,15 @@
 | 0      | 100      | 89583616 |
 | 7      | 1000     | 89939968 |
 | 2129   | 10000    | 38408192  |
+| 281531 | 100000   | 102027264 |
+
+## Queue
+| ms     | duomenys | atmintis  |
+|--------|----------|-----------|
+| 0      | 10       | 10784768 |
+| 0      | 100      | 11440128 |
+| 7      | 1000     | 15765504 |
+| 2135   | 10000    | 34107392  |
 | 284692 | 100000   | 257114112 |
 
 Palyginus laiką, atrodo tokie patys duomenys. Bet Atmities atžvilgių, LinkedList smarkiai prankosta.
@@ -52,7 +61,7 @@ Palyginus laiką, atrodo tokie patys duomenys. Bet Atmities atžvilgių, LinkedL
 | 2331   | 10000    | 29065216  |
 | 289109 | 100000   | 319815680 |
 
-Šioje strategija yra nežymus nugalėtos LinkedList, kadangi jis geriau yra optimizuotas susitvarkyti tokias užduotis kaip Remove, dėl ko jo Laikas geresnis ir atmintis geriau išnaudota.
+Šioje strategija yra nežymus nugalėtos LinkedList, kadangi jis geriau yra optimizuotas susitvarkyti tokias užduotis kaip Remove, dėl ko jo Laikas geresnis ir atmintis geriau išnaudota. Queue netinkamas šioje strategijoje, todėl, kad jis pašalina tik pradinį arba pabaigos elementą.
 
 
 # Programos paleidimo instrukcija:
